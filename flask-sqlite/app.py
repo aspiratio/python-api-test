@@ -11,6 +11,11 @@ def get_db():
 		g.db = sqlite3.connect("TestDB.db")
 	return g.db
 
+def get_query(query_file_path):
+  with open(query_file_path, 'r', encoding='utf-8') as f:
+    query = f.read()
+  return query
+
 @app.route("/")
 def index():
 	
@@ -42,7 +47,7 @@ def index():
 			con.commit()
 	
 	# 商品一覧を読み込み
-	cur = con.execute("SELECT * FROM item_list order by code")
+	cur = con.execute(get_query("./sql/get_item_list.sql"))
 	# fetchallでcurの中身をタプルのリストとして取得する
 	data = cur.fetchall()
 	con.close()
